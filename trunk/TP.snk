@@ -80,7 +80,7 @@ QPEDTERM	TABLE		N$PREPARAR,10,50,20	; CANTIDAD DE PEDIDOS CUANDO SE TERMINA DE D
 
 
 [Subsistema cada 15min]
-; -- Simulación - Trabajo  Práctico | Tema: Venta de Piezas de Bronce --
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
 		GENERATE	900		
 		TABULATE	QSINT15	; TABULO CANTIDAD DE PEDIDOS SIN TERMINAR, CADA 15 MINUTOS
 		TERMINATE
