@@ -1,4 +1,5 @@
 [Subsistema general]
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
 ;---- PREPARACION DEL PEDIDO ---------------------------------
 PREPARAR	TABULATE	QSINT1
 		QUEUE		PREP		; PREPARAR EL PEDIDO 
@@ -28,14 +29,15 @@ OTPROD4	ADVANCE	5,2
 
 
 [Subsistema simular 10hs]
-; -- Simulación - Trabajo  Práctico | Tema: Venta de Piezas de Bronce --
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
 		GENERATE	3600		; SIMULAR 1 DÍA, DE 8 A 18HS.
 		TERMINATE	1
 ;		START		10		
 
 
 [Subsistema Telefónico]
-;---- PEDIDOS TELEFONICOS ------------------------------------
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
+; -- PEDIDOS TELEFONICOS --
 		GENERATE	1200, 600	; LLAMADAS cada 20 +/- 10 minutos.
 		QUEUE		TEL
 		SEIZE		TEL
@@ -51,7 +53,8 @@ OTPROD2	ADVANCE	7,2		; 7+-2SEG POR PRODUCTO
 
 
 [Subsistema Mostrador]
-;---- PEDIDOS EN MOSTRADOR -----------------------------------
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
+; -- PEDIDOS EN MOSTRADOR --
 		GENERATE	480, 300	; Arriban clientes cada 8 +/- 5 minutos.
 		QUEUE		MOST
 		SEIZE		MOST
@@ -67,6 +70,7 @@ OTPROD1	ADVANCE	10,2		; 10+-2SEG POR PRODUCTO
 
 
 [Subsistema Parametrización]
+; -- Simulación - Trabajo  Práctico Grupo 10 | Tema: Venta de Piezas de Bronce --
 PREP		STORAGE	2		; 2 EMPLEADOS QUE PREPARAN EL PEDIDO
 CANTPROD	FUNCTION	RN2,C4	; FUNCION DE CANTIDAD DE PRODUCTOS POR PEDIDO
 0,1/.6,13/.95,21/1,101		; EL PRIMER TRAMO SALTEA LO MENOR A 1, Y COMO TRUNCA SUMO 1
