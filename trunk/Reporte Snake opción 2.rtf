@@ -1,0 +1,188 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\fswiss\fcharset0 Courier New;}}
+{\colortbl ;\red128\green0\blue0;\red0\green0\blue128;\red0\green0\blue0;\red128\green0\blue128;}
+\viewkind4\uc1\pard\qc\cf1\lang11274\ul\b\f0\fs40 REPORTE SNAKE
+\par \cf2\ulnone\fs30 
+\par Informaci\'f3n general
+\par 
+\par \pard\b0\fs20       START_TIME         END_TIME     BLOCKS    FACILITIES    STORAGES
+\par \cf3                0            36000         53             3           1 
+\par \pard\qc\cf2\b\fs30 
+\par Bloques no ejecutables
+\par \pard\cf3\b0\fs20  PREP\tab\tab STORAGE\tab 4\tab\tab ; 2 EMPLEADOS QUE PREPARAN EL PEDIDO
+\par CANTPROD\tab FUNCTION\tab RN2,C4\tab ; FUNCION DE CANTIDAD DE PRODUCTOS POR PEDIDO
+\par 0,1/.6,13/.95,21/1,101
+\par CANTPIEZ\tab FUNCTION\tab RN3,C8\tab ; FUNCION DE CANTIDAD DE PIEZAS POR PEDIDO
+\par 0,1/.14,21/.31,51/.51,201/.67,301/.82,501/.99,2001/1,15001
+\par LOTEPIEZ\tab VARIABLE\tab 1+P$CANTPIEZ/20\tab ; ...POR CADA 20 PIEZAS...
+\par TPREP\tab\tab TABLE\tab\tab MP2,8,400,10\tab ; TIEMPO TOTAL PARA PREPARAR EL PEDIDO
+\par QSINT15\tab TABLE\tab\tab S$PREP,0,10,20\tab ; CANTIDAD DE PEDIDOS SIN TERMINAR CADA 15 MINUTOS
+\par QSINT1\tab TABLE\tab\tab S$PREP,0,10,20\tab ; CANTIDAD DE PEDIDOS SIN TERMINAR CUANDO SE TERMINA DE TOMAR UNO
+\par QPEDTERM\tab TABLE\tab\tab N$PREPARAR,10,50,20\tab ; CANTIDAD DE PEDIDOS CUANDO SE TERMINA DE DESPACHAR UNO
+\par 
+\par \pard\qc\cf2\b\fs30 
+\par Bloques ejecutables
+\par 
+\par \pard\b0\fs20   LINE         LOC  BLOCK_TYPE                               ENTRY_COUNT  CURRENT_COUNT  RETRY
+\par \cf3      3    PREPARAR  TABULATE        QSINT1                           106              0      0
+\par      4           2  QUEUE           PREP                             106              0      0
+\par      5           3  ENTER           PREP                             106              0      0
+\par      6           4  DEPART          PREP                             106              0      0
+\par      7           5  MARK            2                                106              0      0
+\par      8           6  ADVANCE         300,120                          106              2      0
+\par      9           7  ASSIGN          PRODAUX,P$PRODUCTOS              104              0      0
+\par     10     OTPROD3  ADVANCE         5,2                             1270              0      0
+\par     11           9  LOOP            PRODAUX,OTPROD3                 1270              0      0
+\par     12          10  ASSIGN          Z,V$LOTEPIEZ                     104              0      0
+\par     13      OTPIEZ  ADVANCE         3,1                             2809              0      0
+\par     14          12  LOOP            Z,OTPIEZ                        2809              0      0
+\par     15          13  LEAVE           PREP                             104              0      0
+\par     16          14  TABULATE        TPREP                            104              0      0
+\par     18     FACTPED  QUEUE           FACT                             104              0      0
+\par     19          16  SEIZE           FACT                             104              0      0
+\par     20          17  DEPART          FACT                             104              0      0
+\par     21          18  ADVANCE         120,30                           104              0      0
+\par     22          19  ASSIGN          PRODAUX,P$PRODUCTOS              104              0      0
+\par     23     OTPROD4  ADVANCE         5,2                             1270              0      0
+\par     24          21  LOOP            PRODAUX,OTPROD4                 1270              0      0
+\par     25          22  RELEASE         FACT                             104              0      0
+\par     26          23  TABULATE        QPEDTERM                         104              0      0
+\par     27          24  TERMINATE                                        104              0      0
+\par     30          25  GENERATE        3600                              10              0      0
+\par     31          26  TERMINATE       1                                 10              0      0
+\par     36          27  GENERATE        1200,600                          31              0      0
+\par     37          28  QUEUE           TEL                               31              0      0
+\par     38          29  SEIZE           TEL                               31              0      0
+\par     39          30  DEPART          TEL                               31              0      0
+\par     40          31  ADVANCE         180,60                            31              0      0
+\par     41          32  ASSIGN          PRODUCTOS,FN$CANTPROD             31              0      0
+\par     42          33  ASSIGN          CANTPIEZ,FN$CANTPIEZ              31              0      0
+\par     43          34  ASSIGN          PRODAUX,P$PRODUCTOS               31              0      0
+\par     44     OTPROD2  ADVANCE         7,2                              306              0      0
+\par     45          36  LOOP            PRODAUX,OTPROD2                  306              0      0
+\par     46          37  RELEASE         TEL                               31              0      0
+\par     47          38  TRANSFER        ,PREPARAR                         31              0      0
+\par     51          39  GENERATE        480,300                           75              0      0
+\par     52          40  QUEUE           MOST                              75              0      0
+\par     53          41  SEIZE           MOST                              75              0      0
+\par     54          42  DEPART          MOST                              75              0      0
+\par     55          43  ADVANCE         120,60                            75              0      0
+\par     56          44  ASSIGN          PRODUCTOS,FN$CANTPROD             75              0      0
+\par     57          45  ASSIGN          CANTPIEZ,FN$CANTPIEZ              75              0      0
+\par     58          46  ASSIGN          PRODAUX,P$PRODUCTOS               75              0      0
+\par     59     OTPROD1  ADVANCE         10,2                             990              0      0
+\par     60          48  LOOP            PRODAUX,OTPROD1                  990              0      0
+\par     61          49  RELEASE         MOST                              75              0      0
+\par     62          50  TRANSFER        ,PREPARAR                         75              0      0
+\par     77          51  GENERATE        900                               39              0      0
+\par     78          52  TABULATE        QSINT15                           39              0      0
+\par     79          53  TERMINATE                                         39              0      0
+\par \pard\qc\cf2\b\fs30 
+\par Facilities
+\par 
+\par \pard\b0\fs20  FACILITY          ENTRIES    UTIL.  AVE_TIME  AVAILABLE   OWNER   PEND   INTER   RETRY   DELAY
+\par \cf3            FACT        104    0,518   179,471          1       0      0       0       0       0
+\par            MOST         75    0,512   245,613          1       0      0       0       0       0
+\par             TEL         31    0,230   267,484          1       0      0       0       0       0
+\par \pard\qc\cf2\b\fs30 
+\par Queues
+\par 
+\par \pard\b0\fs20  QUEUE             MAX      CONT.  ENTRIES ENTRIES(0)  AVE.CONT.   AVE.TIME    AVE.(-0)   RETRY
+\par \cf3            FACT      3         0       104       65       0,173      59,971     159,923       0
+\par            MOST      2         0        75       57       0,083      39,613     165,056       0
+\par            PREP      1         0       106      105       0,001       0,472      50,000       0
+\par             TEL      1         0        31       31       0,000       0,000       0,000       0
+\par \pard\qc\cf2\b\fs30 
+\par Storages
+\par 
+\par \pard\b0\fs20  STORAGE           CAP.   REMAIN.   MIN.   MAX.  ENTRIES  AVL.   AVE.C.    UTIL.  RETRY   DELAY
+\par \cf3            PREP       4        2       0      4      106     1    1,256    0,314      0       0
+\par \pard\qc\cf2\b\fs30 
+\par Tables
+\par 
+\par \pard\cf4\b0\fs20 QPEDTERM            TABLE            N$PREPARAR,10,50,20
+\par 
+\par \cf3                MEDIA                         :         54,038
+\par                DESVIACION ESTANDAR           :         30,075
+\par                CANTIDAD EN RETRY             :              0
+\par 
+\par \cf2           INTERVALO       FRECUENCIA           %     %ACUMULADO    %REMANENTE
+\par \cf3          0  -        10            9       8,654          8,654        91,346
+\par         11  -        60           50      48,077         56,731        43,269
+\par         61  -       110           45      43,269        100,000         0,000
+\par             Las frecuencias restantes (17) son todas cero.
+\par 
+\par         CANTIDAD DE VALORES TABULADOS :           104
+\par         VALOR MAXIMO TABULADO         :       104,000
+\par 
+\par \cf4 QSINT1              TABLE            S$PREP,0,10,20
+\par 
+\par \cf3                MEDIA                         :          0,868
+\par                DESVIACION ESTANDAR           :          0,794
+\par                CANTIDAD EN RETRY             :              0
+\par 
+\par \cf2           INTERVALO       FRECUENCIA           %     %ACUMULADO    %REMANENTE
+\par \cf3          0  -         0           36      33,962         33,962        66,038
+\par          1  -        10           70      66,038        100,000         0,000
+\par             Las frecuencias restantes (18) son todas cero.
+\par 
+\par         CANTIDAD DE VALORES TABULADOS :           106
+\par         VALOR MAXIMO TABULADO         :         4,000
+\par 
+\par \cf4 QSINT15             TABLE            S$PREP,0,10,20
+\par 
+\par \cf3                MEDIA                         :          1,256
+\par                DESVIACION ESTANDAR           :          0,715
+\par                CANTIDAD EN RETRY             :              0
+\par 
+\par \cf2           INTERVALO       FRECUENCIA           %     %ACUMULADO    %REMANENTE
+\par \cf3          0  -         0            5      12,821         12,821        87,179
+\par          1  -        10           34      87,179        100,000         0,000
+\par             Las frecuencias restantes (18) son todas cero.
+\par 
+\par         CANTIDAD DE VALORES TABULADOS :            39
+\par         VALOR MAXIMO TABULADO         :         3,000
+\par 
+\par \cf4 TPREP               TABLE            MP2,8,400,10
+\par 
+\par \cf3                MEDIA                         :        431,048
+\par                DESVIACION ESTANDAR           :        297,103
+\par                CANTIDAD EN RETRY             :              0
+\par 
+\par \cf2           INTERVALO       FRECUENCIA           %     %ACUMULADO    %REMANENTE
+\par \cf3          0  -         8            0       0,000          0,000       100,000
+\par          9  -       408           59      56,731         56,731        43,269
+\par        409  -       808           42      40,385         97,115         2,885
+\par        809  -      1208            1       0,962         98,077         1,923
+\par       1209  -      1608            0       0,000         98,077         1,923
+\par       1609  -      2008            0       0,000         98,077         1,923
+\par       2009  -      2408            2       1,923        100,000         0,000
+\par             Las frecuencias restantes (3) son todas cero.
+\par 
+\par         CANTIDAD DE VALORES TABULADOS :           104
+\par         VALOR MAXIMO TABULADO         :      2408,000
+\par 
+\par 
+\par \pard\qc\cf2\b\fs30 
+\par Cadena de eventos corrientes (CEC)
+\par 
+\par \pard\b0\fs20  CEC_XACT_NUMBER    PRI          M1       CURRENT       NEXT        PARAMETER        VALUE
+\par \cf3                4      0           0             0         51
+\par 
+\par \pard\qc\cf2\b\fs30 
+\par Cadena de eventos futuros (FEC)
+\par 
+\par \pard\b0\fs20  FEC_XACT_NUMBER    PRI         BDT       CURRENT       NEXT        PARAMETER        VALUE
+\par \cf3                8      0       36052             6          7        PRODUCTOS           13
+\par                                                                      CANTPIEZ           96
+\par                                                                       PRODAUX            0
+\par                                                                             2        35872
+\par                6      0       36101             0         39
+\par                7      0       36127             6          7        PRODUCTOS           13
+\par                                                                      CANTPIEZ          117
+\par                                                                       PRODAUX            0
+\par                                                                             2        35756
+\par               10      0       37203             0         27
+\par                1      0       39600             0         25
+\par 
+\par }
+ 
